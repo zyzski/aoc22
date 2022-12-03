@@ -6,16 +6,17 @@
   "scripts": {
     "dev": "nodemon src/index.ts",
     "test": "vitest",
+    "coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {},
   "devDependencies": {
     "@types/node": "^18.11.10",
     "@typescript-eslint/eslint-plugin": "^5.45.0",
     "@typescript-eslint/parser": "^5.45.0",
+    "@vitest/coverage-c8": "^0.25.3",
     "eslint": "^8.28.0",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1",

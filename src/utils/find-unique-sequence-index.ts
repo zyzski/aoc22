@@ -1,4 +1,4 @@
-export function findUniqueSequenceStart(input: string, sequenceLength: number): number {
+export function findUniqueSequenceIndex(input: string, sequenceLength: number): number {
   for (let i = 0; i < input.length; i++) {
     const sequence = input.slice(i, i + sequenceLength);
     const unique = new Set(sequence);

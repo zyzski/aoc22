@@ -1,13 +1,13 @@
 import { describe, expect, test } from 'vitest';
-import { findUniqueSequenceStart } from './find-unique-sequence-start';
+import { findUniqueSequenceIndex } from './find-unique-sequence-index';
 
 const samples = ['bvwbjplbgvbhsrlpgdmjqwftvncz', 'nppdvjthqldpwncqszvftbrmjlhg', 'mm'];
 const sampleAnswers = [5, 6, -1];
 
-describe('findUniqueSequenceStart', () => {
+describe('findUniqueSequenceIndex', () => {
   test('Sample inputs', () => {
     samples.forEach((sample, index) => {
-      expect(findUniqueSequenceStart(sample, 4)).toBe(sampleAnswers[index]);
+      expect(findUniqueSequenceIndex(sample, 4)).toBe(sampleAnswers[index]);
     });
   });
 });

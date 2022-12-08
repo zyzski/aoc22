@@ -15,9 +15,9 @@ describe('Day 7', () => {
       expect(findVisibleTrees(sample)).toBe(21);
     });
 
-    // test('Puzzle input', () => {
-    //   expect(findVisibleTrees(puzzle)).toBe(1690);
-    // });
+    test('Puzzle input', () => {
+      expect(findVisibleTrees(puzzle)).toBe(1690);
+    });
   });
 
   describe('Part 2: Get sum of directories under 10k', () => {
@@ -25,8 +25,8 @@ describe('Day 7', () => {
       expect(findBestTreeViewScore(sample)).toBe(8);
     });
 
-    // test('Puzzle input', () => {
-    //   expect(findDirectoryToRemove(puzzle)).toBe(5974547);
-    // });
+    test('Puzzle input', () => {
+      expect(findBestTreeViewScore(puzzle)).toBe(535680);
+    });
   });
 });

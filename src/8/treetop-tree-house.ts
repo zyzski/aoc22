@@ -85,86 +85,67 @@ function isVisible(grid: Grid, row: number, col: number): boolean {
 // Part 2: Get visible distance per side
 export function findBestTreeViewScore(input: string[]): number {
   const grid = inputToGrid(input);
-  const scores: number[] = [];
+  let max = 0;
 
-  console.log(grid);
-  console.log('vis', getVisibleDistance(grid, 1, 2));
+  for (let row = 0; row < grid.length; row++) {
+    for (let col = 0; col < grid[0].length; col++) {
+      const score = getVisibleDistance(grid, row, col);
+      max = Math.max(max, score);
+    }
+  }
 
-  // for (let row = 0; row < grid.length; row++) {
-  //   for (let col = 0; col < grid[0].length; col++) {
-  //     const score = getVisibleDistance(grid, row, col);
-  //     if (score > 0) {
-  //       scores.push(score);
-  //     }
-  //   }
-  // }
-
-  // console.log('scores', scores);
-
-  return getScenicScore(scores);
+  return max;
 }
 
-function getVisibleDistance(grid: Grid, row: number, col: number): number[] {
+function getVisibleDistance(grid: Grid, row: number, col: number): number {
   let bottom = 0;
   let top = 0;
   let right = 0;
   let left = 0;
 
   const tree = grid[row][col];
-  // trees can block other trees
 
   // go down each row
   for (let i = row; i < grid.length - 1; i++) {
-    const curr = grid[i][col];
     const next = grid[i + 1][col];
-    console.log(curr, next);
+    bottom++;
 
-    if (next < curr) {
-      bottom++;
-    } else {
+    if (next >= tree) {
       break;
     }
   }
 
   // go up each row
   for (let i = row; i > 0; i--) {
-    const curr = grid[i][col];
     const prev = grid[i - 1][col];
+    top++;
 
-    if (prev < curr) {
-      top++;
-    } else {
+    if (prev >= tree) {
       break;
     }
   }
 
   // go right each col
   for (let i = col; i < grid[0].length - 1; i++) {
-    const curr = grid[row][i];
     const next = grid[row][i + 1];
-    console.log(curr, next);
+    right++;
 
-    if (next < curr) {
-      right++;
-    } else {
+    if (next >= tree) {
       break;
     }
   }
 
   // go left each col
   for (let i = col; i > 0; i--) {
-    const curr = grid[row][i];
     const prev = grid[row][i - 1];
-    console.log(curr, prev);
+    left++;
 
-    if (prev < curr) {
-      left++;
-    } else {
+    if (prev >= tree) {
       break;
     }
   }
 
-  return [bottom, top, right, left];
+  return getScenicScore([bottom, top, right, left]);
 }
 
 function getScenicScore(visibility: number[]): number {

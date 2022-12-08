@@ -9,7 +9,7 @@ const sample = loadFile(samplePath);
 const puzzlePath = path.resolve(__dirname, './input.txt');
 const puzzle = loadFile(puzzlePath);
 
-describe('Day 7', () => {
+describe('Day 8', () => {
   describe('Part 1: Find number of visible trees', () => {
     test('Sample inputs', () => {
       expect(findVisibleTrees(sample)).toBe(21);
@@ -20,7 +20,7 @@ describe('Day 7', () => {
     });
   });
 
-  describe('Part 2: Get sum of directories under 10k', () => {
+  describe('Part 2: Find tree with best view', () => {
     test('Sample inputs', () => {
       expect(findBestTreeViewScore(sample)).toBe(8);
     });

@@ -20,7 +20,7 @@ describe('Day 7', () => {
     });
   });
 
-  describe('Part 2: Get sum of directories under 10k', () => {
+  describe('Part 2: Find directory to remove', () => {
     test('Sample inputs', () => {
       expect(findDirectoryToRemove(sample)).toBe(24933642);
     });

@@ -5,18 +5,21 @@ Find the signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th c
 */
 
 type Command = 'noop' | 'addx';
-const MAX_CYCLES = 220;
+const MAX_CYCLES = 240;
+const DISPLAY_ROWS = 6;
+const DISPLAY_COLS = 40;
 
-export function getSignalStrength(input: string[]): number {
+type OnCycle = (cycle: number, x: number) => void;
+
+export function runCpu(input: string[], onCycle: OnCycle): void {
   let x = 1;
   let cycle = 1;
-  const signalStrengths: number[] = [];
+
   const instructions: (null | number)[] = [];
 
   while (cycle <= MAX_CYCLES) {
     console.log(`[${cycle}] X is ${x}`);
-    checkSignalStrength(cycle, x, signalStrengths);
-    // console.log(instructions);
+    onCycle(cycle, x);
 
     // get instruction
     const instruction = input.shift();
@@ -37,8 +40,6 @@ export function getSignalStrength(input: string[]): number {
 
     cycle++;
   }
-
-  return signalStrengths.reduce((a, b) => a + b, 0);
 }
 
 function getCommand(instruction: string): [Command, number] {
@@ -46,6 +47,18 @@ function getCommand(instruction: string): [Command, number] {
   const cmdArgs = Number(instruction.slice(5));
 
   return [cmdName, cmdArgs];
+}
+
+export function getSignalStrength(input: string[]): number {
+  const signalStrengths: number[] = [];
+
+  function onCycle(cycle: number, x: number) {
+    checkSignalStrength(cycle, x, signalStrengths);
+  }
+
+  runCpu(input, onCycle);
+
+  return signalStrengths.reduce((a, b) => a + b, 0);
 }
 
 function checkSignalStrength(cycle: number, x: number, signalStrengths: number[]) {
@@ -58,5 +71,41 @@ function checkSignalStrength(cycle: number, x: number, signalStrengths: number[]
     case 220:
       signalStrengths.push(x * cycle);
       break;
+  }
+}
+
+// Part 2
+export function drawCrtSprite(input: string[]): void {
+  const display: string[] = Array(DISPLAY_ROWS * DISPLAY_COLS).fill('.');
+
+  function onCycle(cycle: number, x: number) {
+    drawCrt(display, cycle, x);
+  }
+
+  runCpu(input, onCycle);
+}
+
+function drawCrt(display: string[], cycle: number, x: number) {
+  const SPRITE = '#';
+  // since we are using a flat array, we need to offset the index by the number of rows
+  const offset = Math.floor(cycle / DISPLAY_COLS) * DISPLAY_COLS;
+  const cycleIndex = cycle - offset - 1;
+  const spritePos = [x - 1, x, x + 1];
+  // console.log(spritePos);
+  // console.log(cycleIndex);
+  const drawIndex = spritePos.find((pos) => pos === cycleIndex);
+  // console.log(drawIndex);
+
+  // update display with sprite
+  if (drawIndex !== undefined) {
+    display[drawIndex + offset] = SPRITE;
+  }
+  const renderDisplay = [...display];
+
+  while (renderDisplay.length) {
+    const line = renderDisplay.splice(0, DISPLAY_COLS);
+    if (cycle === MAX_CYCLES) {
+      console.log(line.join(''));
+    }
   }
 }

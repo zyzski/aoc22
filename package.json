@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/7/no-space-left-on-device.ts",
+    "dev": "nodemon src/10/cathode-ray-tube.ts",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts"

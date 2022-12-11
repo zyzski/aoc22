@@ -18,7 +18,7 @@ export function runCpu(input: string[], onCycle: OnCycle): void {
   const instructions: (null | number)[] = [];
 
   while (cycle <= MAX_CYCLES) {
-    console.log(`[${cycle}] X is ${x}`);
+    // console.log(`[${cycle}] X is ${x}`);
     onCycle(cycle, x);
 
     // get instruction

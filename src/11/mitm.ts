@@ -16,8 +16,9 @@ class Monkey {
   sendToFalse: number;
   inspections = 0;
   decreaseWorryOnInspect: boolean;
+  modulo = 0;
 
-  constructor(public input: string[], decreaseWorryOnInspect?: boolean) {
+  constructor(public input: string[], decreaseWorryOnInspect?: boolean, modulo?: number) {
     const { number, items, op, test, sendToTrue, sendToFalse } = this.parseInput(input);
     this.number = number;
     this.items = items;
@@ -26,6 +27,7 @@ class Monkey {
     this.sendToTrue = sendToTrue;
     this.sendToFalse = sendToFalse;
     this.decreaseWorryOnInspect = decreaseWorryOnInspect ?? true;
+    this.modulo = modulo ?? 0;
   }
 
   parseInput(input: string[]) {
@@ -58,14 +60,21 @@ class Monkey {
       if (item) {
         const op = this.op.replace('old', item.toString());
         item = eval(`${item} ${op}`);
-        console.log(`Worry level -> ${op} = ${item}`);
+        // console.log(`Worry level -> ${op} = ${item}`);
 
         item = this.decreaseWorry(item);
-        console.log(`Monkey gets bored with item. Worry level is divided by 3 to ${item}`);
+        // console.log(`Monkey gets bored with item. Worry level is divided by 3 to ${item}`);
+
+        // part 2: modulo trick to keep numbers small
+        // multiply each of the monkey's divisors together to get the modulo
+        // https://www.reddit.com/r/adventofcode/comments/zjsi12/2022_day_11_on_the_spoiler_math_involved/
+        if (this.modulo) {
+          item = item % this.modulo;
+        }
 
         const sendTo = this.test(item) ? this.sendToTrue : this.sendToFalse;
 
-        console.log(`Item with worry level ${item} is thrown to ${sendTo}`);
+        // console.log(`Item with worry level ${item} is thrown to ${sendTo}`);
         monkeys[sendTo].addItem(item);
       }
 
@@ -86,9 +95,9 @@ class Monkey {
   }
 }
 
-export function monkeyInTheMiddle(input: string, rounds = 20, decreaseWorryOnInspect = true): number {
-  console.log('Monkey, Knife, Fight!');
-  const monkeys = input.split('\n\n').map((monkey) => new Monkey(monkey.split('\n'), decreaseWorryOnInspect));
+export function monkeyInTheMiddle(input: string, rounds = 20, decreaseWorryOnInspect = true, modulo?: number): number {
+  // console.log('Monkey, Knife, Fight!');
+  const monkeys = input.split('\n\n').map((monkey) => new Monkey(monkey.split('\n'), decreaseWorryOnInspect, modulo));
 
   for (let round = 1; round <= rounds; round++) {
     for (let i = 0; i < monkeys.length; i++) {
@@ -105,6 +114,5 @@ export function monkeyInTheMiddle(input: string, rounds = 20, decreaseWorryOnIns
 function getMonkeyBusinessScore(monkeys: Monkey[]): number {
   const scores = monkeys.map((monkey) => monkey.inspections);
   scores.sort((a, b) => b - a);
-  console.log(scores);
   return scores[0] * scores[1];
 }

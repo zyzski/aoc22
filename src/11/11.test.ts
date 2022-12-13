@@ -19,13 +19,13 @@ describe('Day 11: Monkey in the middle', () => {
     });
   });
 
-  // describe('Part 2: Level of monkey business after 1000 rounds', () => {
-  //   test('Sample input', () => {
-  //     expect(monkeyInTheMiddle(sample, 100, false)).toBe(2713310158);
-  //   });
+  describe('Part 2: Level of monkey business after 1000 rounds', () => {
+    test('Sample input', () => {
+      expect(monkeyInTheMiddle(sample, 10000, false, 96577)).toBe(2713310158);
+    });
 
-  //   test('Puzzle input', () => {
-  //     expect(monkeyInTheMiddle(puzzle)).toBe(15120);
-  //   });
-  // });
+    test('Puzzle input', () => {
+      expect(monkeyInTheMiddle(puzzle, 10000, false, 9699690)).toBe(11741456163);
+    });
+  });
 });

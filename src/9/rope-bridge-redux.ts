@@ -6,38 +6,45 @@ type MoveInstruction =
   | `${MoveLetter} ${number}`
   | `${MoveLetter} ${number}`;
 
-export function simulateRopeAgain(input: string[]) {
-  const tail: Coordinate = { x: 0, y: 0 };
-  const head: Coordinate = { x: 0, y: 0 };
-  const tailPositions = new Set<string>([getPosString(tail)]);
-  // drawCartesianCoordinates(head, tail);
+// This was orginally only for part 2, but it works for part 1 too, so I removed the previous function
+export function simulateRope(input: string[], size: number) {
+  const knots: Coordinate[] = new Array(size).fill(0).map(() => ({ x: 0, y: 0 }));
+  const tailPositions = new Set<string>([getPosString(knots[knots.length - 1])]);
 
   for (let i = 0; i < input.length; i++) {
     const move = input[i] as MoveInstruction;
     const { dir, dist } = getMove(move);
 
     for (let j = 0; j < dist; j++) {
-      // move head
-      head.x += dir.x;
-      head.y += dir.y;
+      // move each knot
+      for (let k = 0; k < knots.length; k++) {
+        const knot = knots[k];
+        const prevKnot = knots[k - 1];
 
-      // move tail
-      const tailMove = getTailMove(head, tail);
-      tail.x += tailMove.x;
-      tail.y += tailMove.y;
-      // console.log(`head: ${head.x},${head.y}`);
-      // console.log(`tail: ${tail.x},${tail.y}`);
+        if (!prevKnot) {
+          // move head
+          knot.x += dir.x;
+          knot.y += dir.y;
+        } else {
+          // move knot
+          const tailMove = getTailMove(prevKnot, knot);
+          knot.x += tailMove.x;
+          knot.y += tailMove.y;
+          validateMoves(knot, prevKnot);
+        }
 
-      // drawCartesianCoordinates(head, tail);
-      validateMoves(head, tail);
-      tailPositions.add(getPosString(tail));
+        if (k === knots.length - 1) {
+          tailPositions.add(getPosString(knots[knots.length - 1]));
+        }
+      }
+
+      // drawCoords(knots);
     }
   }
 
   return tailPositions.size;
 }
 
-/* Movement */
 const MOVES: Record<MoveLetter, Coordinate> = {
   U: { x: 0, y: 1 },
   D: { x: 0, y: -1 },
@@ -100,30 +107,34 @@ function getTailMove(head: Coordinate, tail: Coordinate): Coordinate {
   return MOVES.None;
 }
 
-function drawCartesianCoordinates(head: Coordinate, tail: Coordinate) {
+function drawCoords(coords: Coordinate[]) {
   const size = 5;
   for (let row = size; row >= -size; row--) {
     let r = `${row}`.padStart(2);
 
     for (let col = -size; col <= size; col++) {
-      if (col === head.x && row === head.y && col === tail.x && row === tail.y) {
-        r += 'O';
-      } else if (col === head.x && row === head.y) {
-        r += 'H';
-      } else if (col === tail.x && row === tail.y) {
-        r += 'T';
-      } else if (row === 0 && col === 0) {
-        r += '+';
+      let char = '.';
+
+      if (row === 0 && col === 0) {
+        char = '+';
       } else if (row === 0) {
-        r += '-';
+        char = '-';
       } else if (col === 0) {
-        r += '|';
-      } else {
-        r += '.';
+        char = '|';
       }
+
+      for (let cord = coords.length - 1; cord >= 0; cord--) {
+        const c = coords[cord];
+        if (col === c.x && row === c.y) {
+          char = cord === 0 ? 'H' : `${cord}`;
+        }
+      }
+
+      r += char;
     }
     console.log(r);
   }
+  console.log('\n');
 }
 
 function validateMoves(head: Coordinate, tail: Coordinate): void {

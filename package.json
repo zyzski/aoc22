@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/10/cathode-ray-tube.ts",
+    "dev": "nodemon src/12/hill-climbing-algo.ts",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "lint": "eslint . --ext .ts"

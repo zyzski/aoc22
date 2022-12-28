@@ -1,15 +1,18 @@
-type Signal = Array<number | Signal>;
+type Signal = number | Signal[];
 
 export function decodeDistressSignal(input: string) {
   const pairs = input.split('\n\n');
-  console.log(pairs);
+  let total = 0;
 
   for (let i = 0; i < pairs.length; i++) {
     const pair = pairs[i].split('\n');
-    const left = JSON.parse(pair[0]);
-    const right = JSON.parse(pair[1]);
+    const [left, right] = pair.map((p) => JSON.parse(p));
+    if (compare([left, right])) {
+      total += i + 1;
+    }
   }
-  return 0;
+
+  return total;
 }
 
 export function compare([left, right]: [Signal, Signal]): boolean | undefined {
@@ -19,9 +22,11 @@ export function compare([left, right]: [Signal, Signal]): boolean | undefined {
     return;
   }
 
-  if ([left, right].every(Array.isArray)) {
-    const larr = left as Signal[];
-    const rarr = right as Signal[];
+  // Typescript cannot infer that left and right are arrays inside of .every, so we have to do each comparison separately
+  // if ([left, right].every(Array.isArray)) {
+  if (Array.isArray(left) && Array.isArray(right)) {
+    const larr = left;
+    const rarr = right;
 
     for (let i = 0; i < Math.min(larr.length, rarr.length); i++) {
       const res = compare([larr[i], rarr[i]]);

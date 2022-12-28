@@ -42,18 +42,19 @@ describe('Day 13: Distress signal', () => {
     compareSamples.forEach((sample, index) => {
       const [a, b] = sample;
       test(`Sample input ${JSON.stringify(a)} vs ${JSON.stringify(b)}`, () => {
-        expect(compare(sample)).toBe(compareAnswers[index]);
+        expect(compare([a, b])).toBe(compareAnswers[index]);
       });
     });
   });
-  // describe('Part 1: Sum of good signals', () => {
-  //   test('Sample input', () => {
-  //     expect(decodeDistressSignal(sample)).toBe(10605);
-  //   });
-  //   // test('Puzzle input', () => {
-  //   //   expect(decodeDistressSignal(puzzle)).toBe(51075);
-  //   // });
-  // });
+
+  describe('Part 1: Sum of good signals', () => {
+    test('Sample input', () => {
+      expect(decodeDistressSignal(sample)).toBe(13);
+    });
+    test('Puzzle input', () => {
+      expect(decodeDistressSignal(puzzle)).toBe(6395);
+    });
+  });
 
   // describe('Part 2: Level of monkey business after 1000 rounds', () => {
   //   test('Sample input', () => {
